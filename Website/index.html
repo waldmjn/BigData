@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkte</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Unsere Produkte</h1>
+        <div class="product">
+            <a href="produkt1.html" onclick="logClick('Produkt 1')">
+                <img src="produkt1.jpg" alt="Produkt 1">
+                <h2>Produkt 1</h2>
+            </a>
+        </div>
+        <div class="product">
+            <a href="produkt2.html" onclick="logClick('Produkt 2')">
+                <img src="produkt2.jpg" alt="Produkt 2">
+                <h2>Produkt 2</h2>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function logClick(product) {
+            fetch('http://localhost:3000/logClick', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ product })
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
