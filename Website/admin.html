@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <div class="container">
+        <h2>Logs</h2>
+        <table id="logs-table">
+            <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Zeit</th>
+                </tr>
+            </thead>
+            <tbody id="logs">
+                <!-- Logs werden hier eingefügt -->
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        <p>&copy; 2024 Admin Dashboard</p>
+    </footer>
+
+    <script>
+        async function fetchLogs() {
+            const response = await fetch('http://localhost:3000/getLogs');
+            const logs = await response.json();
+            const logsTableBody = document.getElementById('logs');
+            logsTableBody.innerHTML = ''; // Clear previous logs
+
+            logs.forEach(log => {
+                const logRow = document.createElement('tr');
+                const productCell = document.createElement('td');
+                productCell.textContent = log.product;
+                const timeCell = document.createElement('td');
+                timeCell.textContent = new Date(log.timestamp).toLocaleString();
+                logRow.appendChild(productCell);
+                logRow.appendChild(timeCell);
+                logsTableBody.appendChild(logRow);
+            });
+        }
+
+        window.onload = fetchLogs;
+    </script>
+</body>
+</html>

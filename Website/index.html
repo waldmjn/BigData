@@ -15,17 +15,18 @@
             <div class="product product-top-left">
                 <a href="produkt1.html" onclick="logClick('Produkt 1')">
                     <img src="produkt1.jpg" alt="Produkt 1">
-                    <h2>Produkt 1</h2>
+                    <h2>Pfalz Rotwein</h2>
+                    <p>Der Spätburgunder, auch Pinot Noir genannt, ist eine hochwertige Rotweinsorte, die in Deutschland vor allem in Baden und Rheinhessen angebaut wird.</p>
                 </a>
             </div>
             <div class="product product-bottom-right">
                 <a href="produkt2.html" onclick="logClick('Produkt 2')">
                     <img src="produkt2.jpg" alt="Produkt 2">
-                    <h2>Produkt 2</h2>
+                    <h2>Pfalz Weißwein</h2>
+                    <p>Die Pfalz, das zweitgrößte Weinanbaugebiet Deutschlands, ist berühmt für ihren Riesling und ideale Bedingungen für kräftige, süße Weine.</p>
                 </a>
             </div>
         </div>
-        <div id="logs-container"></div>
     </div>
     <footer>
         <p>&copy; 2024 Unsere Produktseite</p>
@@ -44,23 +45,6 @@
             .then(data => console.log(data))
             .catch(error => console.error('Error:', error));
         }
-
-        function fetchLogs() {
-            fetch('http://localhost:3000/getLogs')
-                .then(response => response.json())
-                .then(logs => {
-                    const logsContainer = document.getElementById('logs-container');
-                    logsContainer.innerHTML = '<h2>Logs</h2>';
-                    logs.forEach(log => {
-                        const logItem = document.createElement('div');
-                        logItem.textContent = `Produkt: ${log.product}, Zeit: ${log.timestamp}`;
-                        logsContainer.appendChild(logItem);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        window.onload = fetchLogs;
     </script>
 </body>
 </html>

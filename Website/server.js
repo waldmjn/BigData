@@ -2,15 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mariadb = require('mariadb');
 const cors = require('cors');
-const path = require('path'); // Hinzufügen dieses Moduls
+const path = require('path');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
-
-// Statische Dateien
 app.use(express.static(path.join(__dirname)));
 
 // Pool-Konfiguration
@@ -24,7 +22,7 @@ const pool = mariadb.createPool({
 
 // Route für die Hauptseite
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html')); // Pfad zur HTML-Datei
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Logging-Route
@@ -60,4 +58,6 @@ app.get('/getLogs', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
+  console.log(`Admin-Seite: http://localhost:${port}/admin.html`);
+  console.log(`Diagramm-Seite: http://localhost:${port}/chart.html`);
 });
