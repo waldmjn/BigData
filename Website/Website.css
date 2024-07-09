@@ -40,7 +40,7 @@ header h1 {
     overflow: hidden;
     text-align: center;
     transition: transform 0.2s;
-    width: 800px;
+    width: 400px;
     position: absolute;
 }
 
@@ -56,13 +56,13 @@ header h1 {
 }
 
 .product-top-left {
-    top: 200px; /* Abstand vom oberen Rand */
-    left: 300px; /* Abstand vom linken Rand */
+    top: 00px; /* Abstand vom oberen Rand */
+    left: 150px; /* Abstand vom linken Rand */
 }
 
 .product-bottom-right {
-    bottom: -900px; /* Abstand vom unteren Rand */
-    right: 300px; /* Abstand vom rechten Rand */
+    top: 150px; /* Abstand vom unteren Rand */
+    right: 150px; /* Abstand vom rechten Rand */
 }
 
 footer {

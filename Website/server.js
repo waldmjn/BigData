@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname)));
 const pool = mariadb.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'Yugioh46!?',
+  password: 'ePddAss2024',
   database: 'product_logs',
   connectionLimit: 5
 });
