@@ -1,45 +1,63 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { Kafka } = require('kafkajs');
+const mariadb = require('mariadb');
+const cors = require('cors');
+const path = require('path'); // Hinzufügen dieses Moduls
 
 const app = express();
 const port = 3000;
 
-// Kafka configuration
-const kafka = new Kafka({
-  clientId: 'my-app',
-  brokers: ['my-cluster-kafka-bootstrap:9092']  // Fügen Sie hier Ihre Kafka-Broker-URLs ein
+app.use(bodyParser.json());
+app.use(cors());
+
+// Statische Dateien
+app.use(express.static(path.join(__dirname)));
+
+// Pool-Konfiguration
+const pool = mariadb.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'Yugioh46!?',
+  database: 'product_logs',
+  connectionLimit: 5
 });
 
-const producer = kafka.producer();
+// Route für die Hauptseite
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html')); // Pfad zur HTML-Datei
+});
 
-const runProducer = async () => {
-  // Connect the Kafka producer
-  await producer.connect();
-  console.log('Kafka producer connected');
-};
-
-runProducer().catch(console.error);
-
-app.use(bodyParser.json());
-
+// Logging-Route
 app.post('/logClick', async (req, res) => {
-  const { product } = req.body;
-
+  const product = req.body.product;
+  console.log('Empfangener Produktklick:', product); // Debugging-Ausgabe
   try {
-    await producer.send({
-      topic: 'clicks',
-      messages: [
-        { value: `Product clicked: ${product}` }
-      ]
-    });
-    res.status(200).send('Click logged');
-  } catch (error) {
-    console.error('Error sending message to Kafka', error);
-    res.status(500).send('Error logging click');
+    const conn = await pool.getConnection();
+    const query = 'INSERT INTO logs (product, timestamp) VALUES (?, ?)';
+    const values = [product, new Date()];
+    await conn.query(query, values);
+    conn.release();
+    console.log('Log erfolgreich gespeichert'); // Debugging-Ausgabe
+    res.send('Log gespeichert');
+  } catch (err) {
+    console.error('Fehler beim Speichern des Logs:', err);
+    res.status(500).send('Fehler beim Speichern des Logs');
+  }
+});
+
+// Route zum Abrufen der Logs
+app.get('/getLogs', async (req, res) => {
+  try {
+    const conn = await pool.getConnection();
+    const logs = await conn.query('SELECT * FROM logs');
+    conn.release();
+    res.json(logs);
+  } catch (err) {
+    console.error('Fehler beim Abrufen der Logs:', err);
+    res.status(500).send('Fehler beim Abrufen der Logs');
   }
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server läuft auf http://localhost:${port}`);
 });

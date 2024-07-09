@@ -4,24 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produkte</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="Website.css">
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>Unsere Produkte</h1>
-        <div class="product">
-            <a href="produkt1.html" onclick="logClick('Produkt 1')">
-                <img src="produkt1.jpg" alt="Produkt 1">
-                <h2>Produkt 1</h2>
-            </a>
+    </header>
+    <div class="container">
+        <div class="product-grid">
+            <div class="product product-top-left">
+                <a href="produkt1.html" onclick="logClick('Produkt 1')">
+                    <img src="produkt1.jpg" alt="Produkt 1">
+                    <h2>Produkt 1</h2>
+                </a>
+            </div>
+            <div class="product product-bottom-right">
+                <a href="produkt2.html" onclick="logClick('Produkt 2')">
+                    <img src="produkt2.jpg" alt="Produkt 2">
+                    <h2>Produkt 2</h2>
+                </a>
+            </div>
         </div>
-        <div class="product">
-            <a href="produkt2.html" onclick="logClick('Produkt 2')">
-                <img src="produkt2.jpg" alt="Produkt 2">
-                <h2>Produkt 2</h2>
-            </a>
-        </div>
+        <div id="logs-container"></div>
     </div>
+    <footer>
+        <p>&copy; 2024 Unsere Produktseite</p>
+    </footer>
 
     <script>
         function logClick(product) {
@@ -36,6 +44,23 @@
             .then(data => console.log(data))
             .catch(error => console.error('Error:', error));
         }
+
+        function fetchLogs() {
+            fetch('http://localhost:3000/getLogs')
+                .then(response => response.json())
+                .then(logs => {
+                    const logsContainer = document.getElementById('logs-container');
+                    logsContainer.innerHTML = '<h2>Logs</h2>';
+                    logs.forEach(log => {
+                        const logItem = document.createElement('div');
+                        logItem.textContent = `Produkt: ${log.product}, Zeit: ${log.timestamp}`;
+                        logsContainer.appendChild(logItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        window.onload = fetchLogs;
     </script>
 </body>
 </html>
